@@ -1,0 +1,131 @@
+NAME:AKTER RATRE(320)                      NAME:JAHAN MINARA(308)
+
+-------------------------------------------------------------------------------------------------------------------------------
+Q:1
+---------------------------- -------------------------------------------    
+1/ Data Integrity
+2/ Join Issue
+3/ Filtering
+4/ Sorting
+5/Redundancy
+ ------------------------------------------------- --- -------------
+Q:2
+-------------------------------------------------------------------
+UPDATE RENTALS
+SET CustomerID = CASE CustomerID WHEN CustomerID IS NULL 
+THEN 0 ELSE CustomerID END,
+CustomerName =CASE CustomerName WHEN CustomerName IS NUL
+THEN CustomerName 'Unknown' CustomerName END,
+RentalDate =CASE RentalDate WHEN RentalDate IS NULL
+THEN RentalDate '2023-01-01' ELSE RentalDate END,
+ReturnDate = CASE ReturnDate WHEN ReturnDate IS NULL
+THEN ReturnDate '2023-01-01' ELSE ReturnDate END;
+
+------------------------------------------------------------------------
+Q:3
+------------------------------------------------------------------------
+
+SELECT*FROM MOVIE_RENTAL;
+
+------------------------------------------------------------------------
+Q:4
+------------------------------------------------------------------------
+1/1NF
+The table already satisfy 1NF because all columns are unique there is contain atomic values.There is no repetition value.
+So,Table will be same.
+
+-------------------------------------------------------------------------
+2/2NF
+
+Rental
+------
+RentalID       MovieTitle         Genre           RentalDate                ReturnDate
+-------------------------------------------------------------------------------
+
+Customer
+-----------
+CustomerID         CustomerName
+-------------------------------------------------------------------------------
+
+
+3/3NF
+
+RentalID                          MovieTitle                 Genre
+
+
+RentalID                         MovieTitle                  RentalDate
+
+
+RentalID                         Genre                          RentalDate
+
+-----------------------------------------------------------------------------------
+Q:5
+-----------------------------------------------------------------------------------
+CREATE DATABASE MovieRentalDB;
+USE MovieRentalDB;
+
+CREATE TABLE Customers (
+    CustomerID INT AUTO_INCREMENT PRIMARY KEY,
+    CustomerName VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Movies (
+    MovieTitle VARCHAR(255) PRIMARY KEY,
+    Genre VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Rentals (
+    RentalID INT AUTO_INCREMENT PRIMARY KEY,
+    MovieTitle VARCHAR(255),
+    CustomerID INT,
+    Rental_price INT,
+    RentalDate DATE NOT NULL,
+    ReturnDate DATE,
+    FOREIGN KEY (MovieTitle) REFERENCES Movies(MovieTitle),
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+);
+
+INSERT INTO Customers (CustomerName) VALUES
+('John Doe'),
+('Jane Smith'),
+('Alice Johnson');
+
+INSERT INTO Movies (MovieTitle, Genre) VALUES
+('Inception', 'Sci-Fi'),
+('The Godfather', 'Crime'),
+('The Dark Knight', 'Action'),
+('Interstellar', 'Sci-Fi'),
+('The Shawshank Redemption', 'Drama'),
+('Gladiator', 'Action');
+
+INSERT INTO Rentals (MovieTitle, CustomerID, RentalDate,Rental_price, ReturnDate) VALUES
+('Inception', 1, '2023-01-10','500', '2023-01-13'),
+('The Godfather', 1, '2023-01-12','1000', NULL),
+('The Dark Knight', 2, '2023-01-11','5000', '2023-01-13'),
+('Interstellar', 2, '2023-01-15','10000', NULL),
+('The Shawshank Redemption', 3, '2023-01-18','400000', NULL),
+('Gladiator', 3, '2023-01-20','50000', NULL);
+
+---------------------------------------------------------------------------------------
+Q:6
+---------------------------------------------------------------------------------------
+
+SELECT MovieTitle
+FROM Movies;
+
+SELECT* FROM CUSTOMERS;
+
+SELECT*
+FROM Movies
+WHERE Rental_price=NULL;
+
+                         
+
+
+
+
+
+
+
+
+
