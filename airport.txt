@@ -1,0 +1,121 @@
+CREATE DATABASE AirportM;
+USE AirportM;
+
+
+CREATE TABLE Airports (
+    airport_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    location VARCHAR(100) NOT NULL,
+    iata_code VARCHAR(3) UNIQUE NOT NULL
+);
+
+
+CREATE TABLE Airlines (
+    airline_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    iata_code VARCHAR(3) UNIQUE NOT NULL
+);
+
+
+CREATE TABLE Flights (
+    flight_id INT PRIMARY KEY AUTO_INCREMENT,
+    airline_id INT NOT NULL,
+    origin VARCHAR(100) NOT NULL,
+    destination VARCHAR(100) NOT NULL,
+    departure_time DATETIME NOT NULL,
+    arrival_time DATETIME NOT NULL,
+    FOREIGN KEY (airline_id) REFERENCES Airlines(airline_id) ON DELETE CASCADE
+);
+
+CREATE TABLE Passengers (
+    passenger_id INT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    date_of_birth DATE NOT NULL,
+    passport_number VARCHAR(50) UNIQUE NOT NULL,
+    nationality VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Tickets (
+    ticket_id INT PRIMARY KEY AUTO_INCREMENT,
+    flight_id INT NOT NULL,
+    passenger_id INT NOT NULL,
+    seat_number VARCHAR(10) NOT NULL,
+    booking_date DATETIME NOT NULL,
+    FOREIGN KEY (flight_id) REFERENCES Flights(flight_id) ON DELETE CASCADE,
+    FOREIGN KEY (passenger_id) REFERENCES Passengers(passenger_id) ON DELETE CASCADE
+);
+
+CREATE TABLE Employees (
+    employee_id INT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    position VARCHAR(50) NOT NULL,
+    hire_date DATE NOT NULL,
+    contact_number VARCHAR(20) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL
+);
+
+CREATE TABLE Maintenance (
+    maintenance_id INT PRIMARY KEY AUTO_INCREMENT,
+    flight_id INT NOT NULL,
+    employee_id INT NOT NULL,
+    maintenance_date DATETIME NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    FOREIGN KEY (flight_id) REFERENCES Flights(flight_id) ON DELETE CASCADE,
+    FOREIGN KEY (employee_id) REFERENCES Employees(employee_id) ON DELETE CASCADE
+);
+
+INSERT INTO Airports (name, location, iata_code)
+VALUES
+('Hazrat Shahjalal International Airport', 'Dhaka, Bangladesh', 'DAC'),
+('Shah Amanat International Airport', 'Chattogram, Bangladesh', 'CGP'),
+('Osmani International Airport', 'Sylhet, Bangladesh', 'ZYL'),
+('Cox\'s Bazar Airport', 'Cox\'s Bazar, Bangladesh', 'CXB');
+
+INSERT INTO Airlines (name, iata_code)
+VALUES
+('Biman Bangladesh Airlines', 'BG'),
+('US-Bangla Airlines', 'BS'),
+('Novoair', 'VQ');
+
+INSERT INTO Flights (airline_id, origin, destination, departure_time, arrival_time)
+VALUES
+(1, 'Dhaka', 'Chattogram', '2024-12-01 08:00:00', '2024-12-01 09:00:00'),
+(2, 'Sylhet', 'Dhaka', '2024-12-02 14:00:00', '2024-12-02 15:00:00'),
+(3, 'Dhaka', 'Cox\'s Bazar', '2024-12-03 10:00:00', '2024-12-03 12:00:00');
+
+
+INSERT INTO Passengers (first_name, last_name, date_of_birth, passport_number, nationality)
+VALUES
+('Abdullah', 'Mohammad', '1988-03-15', 'BDP123456', 'Bangladesh'),
+('Minara', 'Jahan', '1995-06-25', 'BDP654321', 'Bangladesh'),
+('Ratre', 'Akter', '2000-12-05', 'BDP789012', 'Bangladesh');
+
+INSERT INTO Tickets (flight_id, passenger_id, seat_number, booking_date)
+VALUES
+(1, 1, '12A', '2024-11-20 10:30:00'),
+(2, 2, '8C', '2024-11-21 11:00:00'),
+(3, 3, '5B', '2024-11-22 12:15:00');
+
+INSERT INTO Employees (first_name, last_name, position, hire_date, contact_number, email)
+VALUES
+('Mohammad', 'Rahim', 'Aircraft Technician', '2015-05-10', '+8801712345670', 'rahim.mohammad@example.com'),
+('Abdul', 'Karim', 'Ground Staff', '2018-11-20', '+8801911123344', 'karim.abdul@example.com'),
+('Mohammad', 'Kuddus', 'Flight Coordinator', '2020-07-01', '+8801812345678', 'kuddus.mohammad@example.com');
+
+INSERT INTO Maintenance (flight_id, employee_id, maintenance_date, status)
+VALUES
+(1, 1, '2024-11-23 08:00:00', 'Completed'),
+(2, 2, '2024-11-23 09:00:00', 'Scheduled'),
+(3, 1, '2024-11-23 10:00:00', 'In Progress');
+
+
+SELECT * FROM Airports;
+
+select iata_code
+from airlines;
+
+SELECT flight_id, origin, destination, departure_time 
+FROM Flights
+WHERE origin = 'Dhaka';
